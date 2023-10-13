@@ -1,6 +1,6 @@
 import { Module, forwardRef } from '@nestjs/common';
-import { BankController } from './bank.controller';
-import { BankService } from './bank.service';
+import { BankController } from './controller/bank.controller';
+import { BankService } from './service/bank.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { BankEntity } from './enitites/bank.entity';
 import { IconEntity } from 'src/icon/enities/icon.entity';
