@@ -18,6 +18,7 @@ import { UpdateUserDto } from '../dto/update-user.dto';
 import { UserChangePasswordDto } from '../dto/user-change-password.dto';
 import { compareArrayValues } from 'src/common/function/compareArrayHighestValues.function';
 import { IconService } from 'src/icon/icon.service';
+import { FilesService } from 'src/files/files.service';
 
 
 @Injectable()
@@ -28,7 +29,7 @@ export class UsersService {
     constructor(
         @InjectRepository(UsersEntity)
         private usersRepository: Repository<UsersEntity> ,
-        private readonly iconService: IconService
+        private readonly filesServices: FilesService,
     ){}
 
     /**
@@ -67,11 +68,9 @@ export class UsersService {
                 lastName: true,
                 email: true,
                 phoneNumber: true,
-                role: true
+                role: true,
+                icon: true
             },
-            relations: {
-                Icon: true
-            }
           });
     }
 
@@ -89,11 +88,9 @@ export class UsersService {
                 phoneNumber: true,
                 role: true,
                 email: true,
+                icon: true
             },
             where: whereDto,
-            relations: {
-                Icon: true
-            }
         })
     }
 
@@ -125,11 +122,9 @@ export class UsersService {
                 role: true,
                 email: true,
                 phoneNumber: true,
+                icon: true
             }, 
             where: whereDto,
-            relations: {
-                Icon: true
-            }
         })
 
         if(!user) {
@@ -159,13 +154,17 @@ export class UsersService {
 
         try{
             const user = await this.getExists({id: jwtPayload.userId})
-            const {icon, ...data} = dto
-            for(let key in data) {
-                user[key] = data[key]
+
+            const uploadedImage = this.filesServices.uploadFileBase64(
+                dto.icon,
+                'photo',
+            );
+
+            for(let key in dto) {
+                user[key] = dto[key]
             }
             
-            const iconPath = await this.iconService.create(icon, true,jwtPayload,undefined)
-            user.Icon = iconPath
+            user.icon = uploadedImage.publicPath
             await user.save()
             return user
         } catch(e) {

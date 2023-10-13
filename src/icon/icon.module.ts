@@ -8,9 +8,9 @@ import { FilesModule } from 'src/files/files.module';
 import { BankEntity } from 'src/bank/enitites/bank.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([IconEntity,UsersEntity,BankEntity]),
-    FilesModule
-  ],
+  // imports: [TypeOrmModule.forFeature([IconEntity,UsersEntity,BankEntity]),
+  //   FilesModule
+  // ],
   providers: [IconService],
   controllers: [IconController],
   exports: [IconService]

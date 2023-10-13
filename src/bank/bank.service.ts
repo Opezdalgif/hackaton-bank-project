@@ -6,6 +6,7 @@ import { CreateBankDto } from './dto/create-bank.dto';
 import { IconService } from 'src/icon/icon.service';
 import { UpdateBankDto } from './dto/update-bank.dto';
 import { ServicesBankService } from 'src/services/services-bank.service';
+import { FilesService } from 'src/files/files.service';
 
 @Injectable()
 export class BankService {
@@ -14,18 +15,26 @@ export class BankService {
     constructor(
         @InjectRepository(BankEntity)
         private readonly bankRepository: Repository<BankEntity>,
-        private readonly iconService: IconService,
-        private readonly serviceBankService: ServicesBankService
+        private readonly serviceBankService: ServicesBankService,
+        private readonly fileService: FilesService
     ){}
 
     async create(
         dto: CreateBankDto
     ) {
-        const {icon, ...data} = dto
+
+        const uploadedImage = this.fileService.uploadFileBase64(
+            dto.icon,
+            'photo',
+        );
+
+        console.log(uploadedImage);
+        
+        
         const bank = await this.bankRepository.create({
-            ...data
+            ...dto,
+            icon: uploadedImage.publicPath
         })
-        await this.iconService.create(icon,false,undefined,bank.id)
 
         try {
             await bank.save()
@@ -40,9 +49,6 @@ export class BankService {
             where: {
                 id: bank_id
             },
-            relations: {
-                Icon: true
-            }
         })
 
         if(!bank) {
@@ -53,19 +59,29 @@ export class BankService {
     }
 
     async findAll() {
-        return this.bankRepository.find()
+        return this.bankRepository.find({
+            select: {
+                id: true,
+                name: true,
+                address: true,
+                phoneNumber: true,
+                icon: true
+            }
+        })
     }
 
     async update(dto: UpdateBankDto, bank_id: number) {
         const bank = await this.findOne(bank_id)
-        const {icon, ...data} = dto
         
-        for(let key in data) {
-            bank[key] = data[key]
-        }
+        for(let key in dto) {
+
             
-        const iconPath = await this.iconService.create(icon, false,undefined,bank_id)
-        bank.Icon = iconPath
+            bank[key] = dto[key]
+        }
+        
+        if (dto.icon === null) {
+            bank.icon = bank.icon
+        }
 
         try {
             await bank.save()

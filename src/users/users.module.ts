@@ -6,6 +6,7 @@ import { UsersService } from './services/users.service';
 import { SessionEntity } from 'src/auth/enities/session.entity';
 import { UsersController } from './controller/users.controller';
 import { IconModule } from 'src/icon/icon.module';
+import { FilesModule } from 'src/files/files.module';
 
 
 @Global()
@@ -15,13 +16,12 @@ import { IconModule } from 'src/icon/icon.module';
       UsersEntity,
       SessionEntity,
     ]),
-    IconModule
+    FilesModule
 ],
   controllers:[UsersController],
   providers: [UsersService], 
   exports:[
     UsersService,
-
   ]
 })
 export class UsersModule {}

@@ -29,6 +29,6 @@ export class UsersEntity extends BaseEntity {
     @OneToMany(() => SessionEntity, (session) => session.user,{onDelete: 'CASCADE'})
     sessions: SessionEntity[]; 
 
-    @OneToOne(() => IconEntity, (icon) => icon.User,{onUpdate: 'CASCADE', onDelete: 'CASCADE' })
-    Icon: IconEntity
+    @Column({nullable: true})
+    icon: string
 }

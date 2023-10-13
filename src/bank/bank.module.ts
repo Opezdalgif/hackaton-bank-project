@@ -6,11 +6,12 @@ import { BankEntity } from './enitites/bank.entity';
 import { IconEntity } from 'src/icon/enities/icon.entity';
 import { IconModule } from 'src/icon/icon.module';
 import { ServicesBankModule } from 'src/services/services-bank.module';
+import { FilesModule } from 'src/files/files.module';
 
 @Module({
   imports: [TypeOrmModule.forFeature([BankEntity, IconEntity]),
-  IconModule,
-  ServicesBankModule
+  ServicesBankModule,
+  FilesModule
 ],
   controllers: [BankController],
   providers: [BankService]

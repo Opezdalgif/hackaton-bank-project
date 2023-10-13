@@ -23,34 +23,34 @@ export class IconService {
      * @param icon 
      * @returns 
      */
-    async create(icon: any,IsUser: boolean,jwtPayload?: JwtPayload, bank_id?: number){
-        const uploadedImage = this.fileService.uploadFileBase64(
-            icon, 'photo'
-        )
-        let iconCreate;
-        if(IsUser === true) {
-            iconCreate = await this.iconRepository.create({
-                icon: uploadedImage.publicPath,
-                userId: jwtPayload.userId
-            })
+    // async create(icon: any,IsUser: boolean,jwtPayload?: JwtPayload, bank_id?: number){
+    //     const uploadedImage = this.fileService.uploadFileBase64(
+    //         icon, 'photo'
+    //     )
+    //     let iconCreate;
+    //     if(IsUser === true) {
+    //         iconCreate = await this.iconRepository.create({
+    //             icon: uploadedImage.publicPath,
+    //             userId: jwtPayload.userId
+    //         })
             
-        } else {
-            iconCreate = await this.iconRepository.create({
-                icon: uploadedImage.publicPath,
-                bankId: bank_id
-            })
-        }
+    //     } else {
+    //         iconCreate = await this.iconRepository.create({
+    //             icon: uploadedImage.publicPath,
+    //             bankId: bank_id
+    //         })
+    //     }
         
-        try{
-            await iconCreate.save()
-        } catch (e) {
-            this.logger.error(e)
-            throw new InternalServerErrorException('Ошибка при создании одной фоотграфии')
-        }
+    //     try{
+    //         await iconCreate.save()
+    //     } catch (e) {
+    //         this.logger.error(e)
+    //         throw new InternalServerErrorException('Ошибка при создании одной фоотграфии')
+    //     }
         
 
-        return iconCreate
-    }   
+    //     return iconCreate
+    // }   
 
     /**
      * Поиск фотографии по userId
@@ -59,7 +59,7 @@ export class IconService {
      */
     async findOneByUserId(userId: number) {
         return this.iconRepository.find({
-            where: {userId: userId}
+            // where: {userId: userId}
         })
     }
     

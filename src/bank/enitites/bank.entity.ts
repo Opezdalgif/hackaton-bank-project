@@ -16,9 +16,9 @@ export class BankEntity extends BaseEntity {
     @Column({nullable: false})
     phoneNumber: string
 
+    @Column({nullable: true})
+    icon: string
+
     @ManyToMany(() => ServiceBankEntity, (service) => service.Banks)
     Service: ServiceBankEntity[]
-
-    @OneToOne(() => IconEntity, (icon) => icon.Bank,{onUpdate: 'CASCADE', onDelete: 'CASCADE' })
-    Icon: IconEntity
 }

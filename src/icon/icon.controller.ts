@@ -12,13 +12,13 @@ export class IconController {
         private readonly iconService: IconService
     ){}
 
-    @Post('/create')
-    async create(
-        @Body() dto: CreateIconDto,
-        @JwtPayloadParam() jwtPayload: JwtPayload
-    ) {
-        return this.iconService.create(dto.icon, dto.IsUser,jwtPayload,dto.bank_id)
-    }
+    // @Post('/create')
+    // async create(
+    //     @Body() dto: CreateIconDto,
+    //     @JwtPayloadParam() jwtPayload: JwtPayload
+    // ) {
+    //     return this.iconService.create(dto.icon, dto.IsUser,jwtPayload,dto.bank_id)
+    // }
 
     @Delete('/:id/delete')
     async remove(@Param('id') id: number) {
