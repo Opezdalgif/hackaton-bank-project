@@ -43,7 +43,7 @@ export class UsersController {
 
     @Patch('/update')
     update(@JwtPayloadParam() jwtPayload: JwtPayload, @Body() dto: UpdateUserDto) {
-        // return this.userService.update(jwtPayload, dto)
+        return this.userService.update(jwtPayload, dto)
     }
 
     @Delete('/:userId/remove')
