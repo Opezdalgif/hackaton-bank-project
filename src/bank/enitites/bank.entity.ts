@@ -17,6 +17,9 @@ export class BankEntity extends BaseEntity {
     @Column({nullable: false})
     phoneNumber: string
 
+    @Column({nullable: true})
+    icon: string
+
     @OneToMany(() => BankWorkloadEntity, (workloud) => workloud.Bank)
     Workload: BankWorkloadEntity[]
 
