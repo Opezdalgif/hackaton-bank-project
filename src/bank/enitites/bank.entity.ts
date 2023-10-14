@@ -2,6 +2,7 @@ import { IconEntity } from "src/icon/enities/icon.entity";
 import { ServiceBankEntity } from "src/services/enities/service.entity";
 import { BaseEntity, Column, Entity, JoinColumn, ManyToMany, OneToMany, OneToOne, PrimaryColumn, PrimaryGeneratedColumn } from "typeorm";
 import { BankWorkloadEntity } from "./bank-workload.dto";
+import { Reviewentity } from "src/review/entity/review.entity";
 
 @Entity({name: 'bank'})
 export class BankEntity extends BaseEntity {
@@ -25,4 +26,7 @@ export class BankEntity extends BaseEntity {
 
     @ManyToMany(() => ServiceBankEntity, (service) => service.Banks)
     Service: ServiceBankEntity[]
+
+    @OneToMany(() => Reviewentity, review => review.bank, {onDelete: 'CASCADE'})
+    reviews: Reviewentity[]
 }

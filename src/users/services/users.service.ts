@@ -127,7 +127,8 @@ export class UsersService {
             relations: {
                 worklet: {
                     Bank: true,
-                }
+                },
+                reviews: true
             },
             where: whereDto,
         })

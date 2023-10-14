@@ -8,6 +8,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { BankModule } from './bank/bank.module';
 import { ServicesBankModule } from './services/services-bank.module';
+import { ReviewController } from './review/review.controller';
+import { ReviewModule } from './review/review.module';
+import { Reviewentity } from './review/entity/review.entity';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -21,7 +24,8 @@ import { ServicesBankModule } from './services/services-bank.module';
       autoLoadEntities: true,
       entities: [
         UsersEntity,
-        SessionEntity
+        SessionEntity,
+        Reviewentity
       ],
       synchronize: true,
        
@@ -31,7 +35,9 @@ import { ServicesBankModule } from './services/services-bank.module';
     UsersModule,
     AuthModule,
     BankModule,
-    ServicesBankModule
+    ServicesBankModule,
+    ReviewModule
   ],
+  controllers: [],
 })
 export class AppModule {}

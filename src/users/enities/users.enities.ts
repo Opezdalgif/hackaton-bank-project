@@ -3,6 +3,7 @@ import { SessionEntity } from "src/auth/enities/session.entity";
 import { AccountRoleEnum } from "src/common/enums/account-role.enum";
 import { IconEntity } from "src/icon/enities/icon.entity";
 import { BankWorkloadEntity } from "src/bank/enitites/bank-workload.dto";
+import { Reviewentity } from "src/review/entity/review.entity";
 
 @Entity({name: 'users'})
 export class UsersEntity extends BaseEntity {
@@ -32,6 +33,9 @@ export class UsersEntity extends BaseEntity {
 
     @OneToMany(() => BankWorkloadEntity, (worklet) => worklet.user)
     worklet: BankWorkloadEntity
+
+    @OneToMany(() => Reviewentity, review => review.user)
+    reviews: Reviewentity
 
     @Column({nullable: true})
     icon: string
