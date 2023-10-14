@@ -5,16 +5,22 @@ import { Repository } from "typeorm";
 import { BankService } from "./bank.service";
 import { CreateBankWorkloadDto } from "../dto/create-bank-worload.dto";
 import { Cron, CronExpression } from "@nestjs/schedule";
+import { JwtPayload } from "src/common/types/JwtPayload.types";
+import { UsersService } from "src/users/services/users.service";
 
 @Injectable()
 export class BankWorkloadService {
     constructor(
         @InjectRepository(BankWorkloadEntity)
         private readonly bankWorkloadRepository: Repository<BankWorkloadEntity>,
-        private readonly bankService: BankService
+        private readonly bankService: BankService,
+        private readonly usersService: UsersService
     ){}
 
-    async create(dto: CreateBankWorkloadDto) {
+    async create(dto: CreateBankWorkloadDto, jwtPayload: JwtPayload) {
+
+        const user = await this.usersService.getOne(jwtPayload.userId)
+
         const bank = await this.bankService.findOne(dto.bankId)
 
         let service;
@@ -32,7 +38,8 @@ export class BankWorkloadService {
 
         const workload = await this.bankWorkloadRepository.create({
             nameService: service,
-            bankId: dto.bankId
+            bankId: dto.bankId,
+            userId: jwtPayload.userId
         })
         console.log(workload)
         try {
@@ -40,6 +47,8 @@ export class BankWorkloadService {
         } catch(e){
             throw new BadRequestException(`Ошибка добавление заявки загружености`)
         }
+
+        return workload
     }
 
     @Cron(CronExpression.EVERY_DAY_AT_7PM)

@@ -3,6 +3,8 @@ import { BankWorkloadService } from "../service/bank-workload.service";
 import { CreateBankWorkloadDto } from "../dto/create-bank-worload.dto";
 import { AccessTokenGuard } from "src/common/guards/accessToken.guard";
 import { ValidationPipe } from "src/common/pipes/validation.pipe";
+import { JwtPayloadParam } from "src/common/decorators/jwt-payload.decorator";
+import { JwtPayload } from "src/common/types/JwtPayload.types";
 
 @Controller('bank-workload')
 @UseGuards(AccessTokenGuard)
@@ -14,9 +16,10 @@ export class BankWorkloadController {
 
     @Post('create')
     create(
-        @Body() dto: CreateBankWorkloadDto
+        @Body() dto: CreateBankWorkloadDto,
+        @JwtPayloadParam() JwtPayload: JwtPayload
     ) {
-        return this.bankWorkloadService.create(dto)
+        return this.bankWorkloadService.create(dto, JwtPayload)
     }
 
     @Delete('remove/:bankWorkloadId')

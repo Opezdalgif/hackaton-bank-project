@@ -21,6 +21,10 @@ export class UpdateUserDto {
     @IsString()
     icon: string
 
+    @IsOptional()
+    @IsString()
+    phoneNumber: string
+
     
 
 }

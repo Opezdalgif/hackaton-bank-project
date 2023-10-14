@@ -10,11 +10,14 @@ import { FilesModule } from 'src/files/files.module';
 import { BankWorkloadEntity } from './enitites/bank-workload.dto';
 import { BankWorkloadController } from './controller/bank-workload.controller';
 import { BankWorkloadService } from './service/bank-workload.service';
+import { UsersEntity } from 'src/users/enities/users.enities';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([BankEntity, IconEntity, BankWorkloadEntity]),
+  imports: [TypeOrmModule.forFeature([BankEntity, IconEntity, BankWorkloadEntity, UsersEntity]),
   ServicesBankModule,
-  FilesModule
+  FilesModule,
+  UsersModule
 ],
   controllers: [BankController, BankWorkloadController],
   providers: [BankService, BankWorkloadService]

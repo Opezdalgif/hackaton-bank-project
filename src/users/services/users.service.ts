@@ -124,6 +124,11 @@ export class UsersService {
                 phoneNumber: true,
                 icon: true
             }, 
+            relations: {
+                worklet: {
+                    Bank: true,
+                }
+            },
             where: whereDto,
         })
 
@@ -155,7 +160,7 @@ export class UsersService {
         try{
             const user = await this.getExists({id: jwtPayload.userId})
 
-            const uploadedImage = this.filesServices.uploadFileBase64(
+            const uploadedImage = await this.filesServices.uploadFileBase64(
                 dto.icon,
                 'photo',
             );
