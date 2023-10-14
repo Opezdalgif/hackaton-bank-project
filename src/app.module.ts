@@ -11,6 +11,8 @@ import { ServicesBankModule } from './services/services-bank.module';
 import { ReviewController } from './review/review.controller';
 import { ReviewModule } from './review/review.module';
 import { Reviewentity } from './review/entity/review.entity';
+import { StatisticsModule } from './statistics/statistics.module';
+import { AchivmentsModule } from './achivments/achivments.module';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -36,7 +38,9 @@ import { Reviewentity } from './review/entity/review.entity';
     AuthModule,
     BankModule,
     ServicesBankModule,
-    ReviewModule
+    ReviewModule,
+    StatisticsModule,
+    AchivmentsModule
   ],
   controllers: [],
 })

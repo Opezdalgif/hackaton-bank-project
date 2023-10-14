@@ -19,6 +19,7 @@ import { UserChangePasswordDto } from '../dto/user-change-password.dto';
 import { compareArrayValues } from 'src/common/function/compareArrayHighestValues.function';
 import { IconService } from 'src/icon/icon.service';
 import { FilesService } from 'src/files/files.service';
+import { AchivmentsService } from 'src/achivments/achivments.service';
 
 
 @Injectable()
@@ -30,6 +31,7 @@ export class UsersService {
         @InjectRepository(UsersEntity)
         private usersRepository: Repository<UsersEntity> ,
         private readonly filesServices: FilesService,
+        private readonly achivmentsService: AchivmentsService
     ){}
 
     /**
@@ -71,6 +73,9 @@ export class UsersService {
                 role: true,
                 icon: true
             },
+            relations: {
+                Achivments: true
+            }
           });
     }
 
@@ -91,6 +96,9 @@ export class UsersService {
                 icon: true
             },
             where: whereDto,
+            relations: {
+                Achivments: true,
+            }
         })
     }
 
@@ -128,7 +136,8 @@ export class UsersService {
                 worklet: {
                     Bank: true,
                 },
-                reviews: true
+                reviews: true,
+                Achivments: true
             },
             where: whereDto,
         })
@@ -234,6 +243,39 @@ export class UsersService {
             throw new InternalServerErrorException(
                 'Ошибка проверки правильности пароля',
             );
+        }
+    }
+
+    async addAchivment(userId: number, achivmentId: number) {
+        const user = await this.find({id: userId});
+        const achivment = await this.achivmentsService.findOne(achivmentId);
+    
+        if (!user.Achivments) {
+            user.Achivments = [];
+        }
+    
+        user.Achivments.push(achivment);
+    
+        try {
+            await this.usersRepository.save(user);
+        } catch (e) {
+            this.logger.log(e);
+            throw new BadRequestException(`Ошибка в добавлении достижения`);
+        }
+    }
+
+    async removeAchivment(userId: number, achivmentId: number) {
+        const user = await this.find({id: userId});
+        const achivment = await this.achivmentsService.findOne(achivmentId);
+
+        let copyArr = user.Achivments.filter(ach => ach.id !== achivment.id)
+       
+        try {
+            user.Achivments = copyArr
+            await user.save()
+        } catch(e) {
+            this.logger.log(e)
+            throw new BadRequestException(`Ошибка в удаление достижения`)
         }
     }
 }

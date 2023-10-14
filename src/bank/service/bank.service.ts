@@ -51,7 +51,8 @@ export class BankService {
             },
             relations: {
                 Service: true,
-                Workload:true
+                Workload:true,
+                Statistics: true
             }
         })
 
@@ -66,7 +67,8 @@ export class BankService {
         return this.bankRepository.find({
             relations: {
                 Service: true,
-                Workload: true
+                Workload: true,
+                Statistics: true
             }
         })
     }
@@ -117,7 +119,7 @@ export class BankService {
             await this.bankRepository.save(bank);
         } catch (e) {
             this.logger.log(e);
-            throw new BadRequestException(`Ошибка в добавлении хобби`);
+            throw new BadRequestException(`Ошибка в добавлении услуги`);
         }
     }
 
@@ -133,7 +135,7 @@ export class BankService {
             await bank.save()
         } catch(e) {
             this.logger.log(e)
-            throw new BadRequestException(`Ошибка в удаление хобби`)
+            throw new BadRequestException(`Ошибка в удаление услуги`)
         }
     }
 

@@ -10,9 +10,10 @@ export class BankWorkloadEntity extends BaseEntity {
     @Column({nullable: false})
     nameService: string
     
-    @Column({nullable: false}) 
-    bankId: number
+    @Column({nullable: true}) 
+    bankId: number 
     @ManyToOne(() => BankEntity, (bank) => bank.Workload)
+    @JoinColumn({name: 'bankId'})
     Bank: BankEntity
 
     @Column({nullable: false, unique: false})

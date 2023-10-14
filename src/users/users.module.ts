@@ -7,6 +7,7 @@ import { SessionEntity } from 'src/auth/enities/session.entity';
 import { UsersController } from './controller/users.controller';
 import { IconModule } from 'src/icon/icon.module';
 import { FilesModule } from 'src/files/files.module';
+import { AchivmentsModule } from 'src/achivments/achivments.module';
 
 
 @Global()
@@ -16,7 +17,8 @@ import { FilesModule } from 'src/files/files.module';
       UsersEntity,
       SessionEntity,
     ]),
-    FilesModule
+    FilesModule,
+    AchivmentsModule
 ],
   controllers:[UsersController],
   providers: [UsersService], 

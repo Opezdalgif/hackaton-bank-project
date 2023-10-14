@@ -2,8 +2,9 @@ import { BaseEntity, Column, PrimaryGeneratedColumn , Entity, ManyToMany, JoinTa
 import { SessionEntity } from "src/auth/enities/session.entity";
 import { AccountRoleEnum } from "src/common/enums/account-role.enum";
 import { IconEntity } from "src/icon/enities/icon.entity";
-import { BankWorkloadEntity } from "src/bank/enitites/bank-workload.dto";
 import { Reviewentity } from "src/review/entity/review.entity";
+import { BankWorkloadEntity } from "src/bank/enitites/bank-workload.entity";
+import { AchivmentsEntity } from "src/achivments/enities/achivments.entity";
 
 @Entity({name: 'users'})
 export class UsersEntity extends BaseEntity {
@@ -36,6 +37,8 @@ export class UsersEntity extends BaseEntity {
 
     @OneToMany(() => Reviewentity, review => review.user)
     reviews: Reviewentity
+    @ManyToMany(() => AchivmentsEntity, (achivments) => achivments.Users)
+    Achivments: AchivmentsEntity[]
 
     @Column({nullable: true})
     icon: string
