@@ -55,6 +55,7 @@ export class AuthService {
             phoneNumber: dto.phoneNumber,
         });
         
+        await this.usersService.addAchivment(user.id, 1)
 
         return this.getTokens(user)
     }

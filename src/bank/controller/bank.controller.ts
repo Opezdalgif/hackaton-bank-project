@@ -53,14 +53,14 @@ export class BankController {
     }
 
     @Post('/addServiceBank')
-    addHobbies(
+    addServiceBank(
         @Body() dto: AddServiceBankDto,
     ) {
         return this.bankService.addServiceBank(dto.bankId, dto.serviceId)
     }
 
     @Post('/removeServiceBank')
-    removeHobbies(
+    removeServiceBank(
         @Body() dto: RemoveServiceBankDto
     ) {
         return this.bankService.removeServiceBank(dto.bankId, dto.serviceId)

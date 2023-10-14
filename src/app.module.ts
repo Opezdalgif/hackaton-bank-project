@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { BankModule } from './bank/bank.module';
 import { ServicesBankModule } from './services/services-bank.module';
 import { StatisticsModule } from './statistics/statistics.module';
+import { AchivmentsModule } from './achivments/achivments.module';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -33,7 +34,8 @@ import { StatisticsModule } from './statistics/statistics.module';
     AuthModule,
     BankModule,
     ServicesBankModule,
-    StatisticsModule
+    StatisticsModule,
+    AchivmentsModule
   ],
 })
 export class AppModule {}

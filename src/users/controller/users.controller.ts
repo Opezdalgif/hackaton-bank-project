@@ -10,6 +10,8 @@ import { UsersService } from '../services/users.service';
 import { Roles } from 'src/common/decorators/roles.decorator';
 import { JwtPayload } from 'src/common/types/JwtPayload.types';
 import { AccountRoleEnum } from 'src/common/enums/account-role.enum';
+import { AddAchivmentDto } from '../dto/add-achivment.dto';
+import { RemoveAchivmentDto } from '../dto/remove-achivment.dto';
 
 
 @UseGuards(AccessTokenGuard)
@@ -64,5 +66,19 @@ export class UsersController {
     @Patch('/update/password')
     changePassword(@JwtPayloadParam() jwtPayload: JwtPayload, @Body() dto: UserChangePasswordDto) {
         return this.userService.changePassword({id: jwtPayload.userId}, dto)
+    }
+
+    @Post('/addAchivment')
+    addAchivment(
+        @Body() dto: AddAchivmentDto,
+    ) {
+        return this.userService.addAchivment(dto.userId, dto.achivmentId)
+    }
+
+    @Post('/removeAchivment')
+    removeAchivment(
+        @Body() dto: RemoveAchivmentDto
+    ) {
+        return this.userService.removeAchivment(dto.userId, dto.achivmentId)
     }
 }
