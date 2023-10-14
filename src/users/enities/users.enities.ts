@@ -2,7 +2,7 @@ import { BaseEntity, Column, PrimaryGeneratedColumn , Entity, ManyToMany, JoinTa
 import { SessionEntity } from "src/auth/enities/session.entity";
 import { AccountRoleEnum } from "src/common/enums/account-role.enum";
 import { IconEntity } from "src/icon/enities/icon.entity";
-import { BankWorkloadEntity } from "src/bank/enitites/bank-workload.dto";
+import { BankWorkloadEntity } from "src/bank/enitites/bank-workload.entity";
 
 @Entity({name: 'users'})
 export class UsersEntity extends BaseEntity {

@@ -1,20 +1,23 @@
-import { BadRequestException, Inject, Injectable } from "@nestjs/common";
+import { BadRequestException, Inject, Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { BankWorkloadEntity } from "../enitites/bank-workload.dto";
+import { BankWorkloadEntity } from "../enitites/bank-workload.entity";
 import { Repository } from "typeorm";
 import { BankService } from "./bank.service";
 import { CreateBankWorkloadDto } from "../dto/create-bank-worload.dto";
 import { Cron, CronExpression } from "@nestjs/schedule";
 import { JwtPayload } from "src/common/types/JwtPayload.types";
 import { UsersService } from "src/users/services/users.service";
+import { StatisticsService } from "src/statistics/statistics.service";
 
 @Injectable()
 export class BankWorkloadService {
+    private logger = new Logger(`BANK-WORKLOAD-SERVICE`)
     constructor(
         @InjectRepository(BankWorkloadEntity)
         private readonly bankWorkloadRepository: Repository<BankWorkloadEntity>,
         private readonly bankService: BankService,
-        private readonly usersService: UsersService
+        private readonly usersService: UsersService,
+        private readonly statisticsService: StatisticsService
     ){}
 
     async create(dto: CreateBankWorkloadDto, jwtPayload: JwtPayload) {
@@ -41,10 +44,12 @@ export class BankWorkloadService {
             bankId: dto.bankId,
             userId: jwtPayload.userId
         })
-        console.log(workload)
+
         try {
             await workload.save()
+            await this.addStatistics(workload.id)
         } catch(e){
+            this.logger.error(e)
             throw new BadRequestException(`Ошибка добавление заявки загружености`)
         }
 
@@ -85,5 +90,33 @@ export class BankWorkloadService {
         }
     }
 
-    
+    async findOne(workloadId: number) {
+        const workload = await this.bankWorkloadRepository.findOne({
+            where: {
+                id: workloadId
+            },
+            relations: {
+                Bank: {
+                    Statistics: true
+                }
+            }
+        })
+
+        if(!workload) {
+            throw new BadRequestException(`Данной заявки загруженности нету`)
+        }
+
+        return workload
+    }
+
+    async addStatistics(workloadId: number) {
+        const workload = await this.findOne(workloadId)
+
+        if(workload.Bank.Statistics) {
+            workload.Bank.Statistics.workloadCount += 1
+            await workload.Bank.Statistics.save()
+        } else {
+            await this.statisticsService.create(workload.Bank.id)
+        }
+    }
 }

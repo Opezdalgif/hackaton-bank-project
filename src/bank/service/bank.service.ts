@@ -51,7 +51,8 @@ export class BankService {
             },
             relations: {
                 Service: true,
-                Workload:true
+                Workload:true,
+                Statistics: true
             }
         })
 
@@ -66,7 +67,8 @@ export class BankService {
         return this.bankRepository.find({
             relations: {
                 Service: true,
-                Workload: true
+                Workload: true,
+                Statistics: true
             }
         })
     }

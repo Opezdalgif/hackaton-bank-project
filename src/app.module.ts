@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { BankModule } from './bank/bank.module';
 import { ServicesBankModule } from './services/services-bank.module';
+import { StatisticsModule } from './statistics/statistics.module';
 
 @Module({
   imports: [ConfigModule.forRoot(),
@@ -31,7 +32,8 @@ import { ServicesBankModule } from './services/services-bank.module';
     UsersModule,
     AuthModule,
     BankModule,
-    ServicesBankModule
+    ServicesBankModule,
+    StatisticsModule
   ],
 })
 export class AppModule {}
