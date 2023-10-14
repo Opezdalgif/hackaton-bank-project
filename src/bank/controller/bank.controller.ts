@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, UseGuards, UsePipes, Patch, Delete, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards, UsePipes, Patch, Delete, Query, ParseArrayPipe } from '@nestjs/common';
 import { BankService } from '../service/bank.service';
 import { CreateBankDto } from '../dto/create-bank.dto';
 import { AccessTokenGuard } from 'src/common/guards/accessToken.guard';
@@ -67,7 +67,9 @@ export class BankController {
     }
 
     @Get('filter')
-    filter(@Query() dto: BankFilerDto) {
-        return this.bankService.findAllBankByFilter(Number(dto.serviceId))
+    filter(@Query () dto: BankFilerDto) {
+        const cleanedIdsString = dto.serviceIds.replace(/^\[|\]$/g, '');
+        const ids: number[] = cleanedIdsString.split(',').map(id => parseInt(id));
+        return this.bankService.findAllBankByFilter(ids)
     }
 }

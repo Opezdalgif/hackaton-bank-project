@@ -1,7 +1,7 @@
 import { BadRequestException, Inject, Injectable, InternalServerErrorException, Logger, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { BankEntity } from '../enitites/bank.entity';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { CreateBankDto } from '../dto/create-bank.dto';
 import { IconService } from 'src/icon/icon.service';
 import { UpdateBankDto } from '../dto/update-bank.dto';
@@ -137,70 +137,48 @@ export class BankService {
         }
     }
 
-    async findAllBankByFilter(serviceId: number,) {
+    async findAllBankByFilter(serviceIds: number[],) {
+        const banksFilter = [];
+
         const banks = await this.bankRepository.find({
             where: {
                 Service: {
-                    id: serviceId
+                    id: In(serviceIds)
                 }
             },
             relations: {
-                Workload: true
+                Workload: true,
+                Service: true
             }
-        })
+        });
 
-        console.log(banks)
-        const service = await this.serviceBankService.findOne(serviceId)
-        let bankFilerService = []
+        for (const bank of banks) {
+            const arrayWorkload = bank.Workload.map(workload => workload.nameService);
+            const bankWorkload = await compareArrayValues(arrayWorkload);
 
-        for(let bank of banks) {
-            const arrayWorload = []
+            const bankFilerService = bank.Service.map(service => {
+                let workloadValue;
 
-            let maxValue;
-            let minValue;
-            let avageValue;  
-            
-            bank.Workload.map(workload => arrayWorload.push(workload.nameService))
-            const bankWordload = await compareArrayValues(arrayWorload)
-            bankWordload.mostCommonValues.map(max => {
-                if(max === service.name) {
-                    maxValue = service.name
+                if (bankWorkload.mostCommonValues.includes(service.name)) {
+                    workloadValue = WorkloadValue.HIGH;
+                } else if (bankWorkload.averageValueArray.includes(service.name)) {
+                    workloadValue = WorkloadValue.AVARAGE;
+                } else if (bankWorkload.leastCommonValues.includes(service.name)) {
+                    workloadValue = WorkloadValue.MIN;
                 }
-            })
-            bankWordload.leastCommonValues.map(min => {
-                if(min === service.name) {
-                    minValue = service.name
-                }
-            })
-            bankWordload.averageValueArray.map(avage => {
-                if(avage === service.name) {
-                    avageValue = service.name
-                }
-            })
 
-           let objectWorkload = {}
-           
-           if(maxValue) {
-                objectWorkload = {
-                    workload: WorkloadValue.HIGH,
-                    bank: bank
-                }
-           }  else if (avageValue) {
-            objectWorkload = {
-                workload: WorkloadValue.AVARAGE,
+                return {
+                    serviceName: service.name,
+                    workload: workloadValue
+                };
+            });
+
+            banksFilter.push({
+                workload: bankFilerService,
                 bank: bank
-            }
-           } else if (minValue) {
-            objectWorkload = {
-                workload: WorkloadValue.MIN,
-                bank: bank
-            }
-           } 
-           
-           bankFilerService.push(objectWorkload)
+            });
         }
 
-        return bankFilerService
+        return banksFilter;
     }
-
 }

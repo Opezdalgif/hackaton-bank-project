@@ -1,3 +1,6 @@
+import { IsString } from "class-validator";
+
 export class BankFilerDto {
-    serviceId: number
+    @IsString()
+    serviceIds: string
 }
