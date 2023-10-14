@@ -1,4 +1,4 @@
-import { Body, Controller, Post, UseGuards, UsePipes } from "@nestjs/common";
+import { Body, Controller, Delete, Param, Post, UseGuards, UsePipes } from "@nestjs/common";
 import { BankWorkloadService } from "../service/bank-workload.service";
 import { CreateBankWorkloadDto } from "../dto/create-bank-worload.dto";
 import { AccessTokenGuard } from "src/common/guards/accessToken.guard";
@@ -18,4 +18,10 @@ export class BankWorkloadController {
     ) {
         return this.bankWorkloadService.create(dto)
     }
+
+    @Delete('remove/:bankWorkloadId')
+    remove(@Param('bankWorkloadId') bankWorkloadId: number) {
+        return this.bankWorkloadService.remove(bankWorkloadId)
+    }
+
 }

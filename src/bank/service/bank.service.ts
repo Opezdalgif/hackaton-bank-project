@@ -8,7 +8,7 @@ import { UpdateBankDto } from '../dto/update-bank.dto';
 import { ServicesBankService } from 'src/services/services-bank.service';
 import { FilesService } from 'src/files/files.service';
 import { compareArrayValues } from 'src/common/function/compareArrayHighestValues.function';
-import { WorkloadValue } from 'src/common/enums/worload.enum';
+import { WorkloadValue } from 'src/common/enums/workload.enum';
 
 @Injectable()
 export class BankService {
@@ -137,7 +137,7 @@ export class BankService {
         }
     }
 
-    async findAllBankByFilter(serviceIds: number[],) {
+    async findAllBankByFilter(serviceIds: number[], workloadValues: WorkloadValue) {
         const banksFilter = [];
 
         const banks = await this.bankRepository.find({
@@ -151,7 +151,7 @@ export class BankService {
                 Service: true
             }
         });
-
+        
         for (const bank of banks) {
             const arrayWorkload = bank.Workload.map(workload => workload.nameService);
             const bankWorkload = await compareArrayValues(arrayWorkload);
@@ -177,6 +177,17 @@ export class BankService {
                 workload: bankFilerService,
                 bank: bank
             });
+        }
+
+        //const banksFilterWorkloadValue = []
+
+        if(workloadValues) {
+            const banksFilterWorkloadValue = banksFilter.filter(entry => {
+                const hasMinWorkload = entry.workload.some(workload => workload.workload === workloadValues);
+                return hasMinWorkload;
+            });
+
+            return banksFilterWorkloadValue
         }
 
         return banksFilter;

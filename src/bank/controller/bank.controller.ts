@@ -70,6 +70,6 @@ export class BankController {
     filter(@Query () dto: BankFilerDto) {
         const cleanedIdsString = dto.serviceIds.replace(/^\[|\]$/g, '');
         const ids: number[] = cleanedIdsString.split(',').map(id => parseInt(id));
-        return this.bankService.findAllBankByFilter(ids)
+        return this.bankService.findAllBankByFilter(ids, dto.workloadValue)
     }
 }
